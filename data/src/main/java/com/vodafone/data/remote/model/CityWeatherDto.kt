@@ -10,7 +10,7 @@ data class CityWeatherDto(
     @SerializedName("coord")
     val coord: CoordDto?,
     @SerializedName("dt")
-    val dt: Int?,
+    val date: Int?,
     @SerializedName("id")
     val id: Int?,
     @SerializedName("main")
