@@ -17,16 +17,7 @@ jobs:
         with:
           distribution: 'adopt'
           java-version: '17'
-
-      - name: Gradle Cache
-        uses: burrunan/gradle-cache-action@v1
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle
+          cache: gradle
 
       - name: Build with Gradle
         uses: ./gradlew build
