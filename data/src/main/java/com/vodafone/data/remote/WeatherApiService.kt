@@ -1,5 +1,6 @@
 package com.vodafone.data.remote
 
+import com.vodafone.data.remote.model.CityWeatherDto
 import com.vodafone.data.remote.model.WeatherResponseDto
 import retrofit2.Response
 import retrofit2.http.GET
@@ -10,7 +11,7 @@ interface WeatherApiService {
     @GET("weather")
     suspend fun getCurrentWeather(
         @Query("q") cityName: String,
-    ): Response<WeatherResponseDto>
+    ): Response<CityWeatherDto>
 
     @GET("forecast")
     suspend fun getWeatherForecast(
