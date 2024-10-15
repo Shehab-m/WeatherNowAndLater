@@ -1,0 +1,41 @@
+name: Android CI/CD Pipeline
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4.2.1
+
+      - name: Setup Java JDK
+        uses: actions/setup-java@v4.4.0
+        with:
+          distribution: 'adopt'
+          java-version: '1.8'
+
+      - name: Gradle Cache
+        uses: burrunan/gradle-cache-action@v1
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle
+
+      - name: Build with Gradle
+        uses: ./gradlew build
+
+      - name: Run Unit Tests
+        run: ./gradlew testDebugUnitTest
+
+      - name: Upload a Build Artifact
+        uses: actions/upload-artifact@v4.4.3
+        with:
+          name: WeatherNL.Apk
+          path: app/build/outputs/apk/app-debug.apk
