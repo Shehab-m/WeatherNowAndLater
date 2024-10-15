@@ -63,4 +63,6 @@ dependencies {
     //OkHttp
     implementation(libs.okhttp)
     implementation(libs.okhttp.logger)
+    //DataStore
+    implementation(libs.androidx.datastore.preferences)
 }

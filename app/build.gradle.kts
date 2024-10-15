@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    kotlin("kapt")
+    alias(libs.plugins.hilt.library)
 }
 
 android {
@@ -51,6 +53,7 @@ android {
 
 dependencies {
     implementation(project(":core"))
+    implementation(project(":data"))
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -66,4 +69,13 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+    implementation (libs.androidx.work.runtime.ktx)
+    // Hilt
+    implementation(libs.hilt.android)
+    implementation(libs.androidx.hilt.work)
+    kapt(libs.hilt.android.compiler)
+    //Retrofit
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
+    implementation(libs.gson)
 }
