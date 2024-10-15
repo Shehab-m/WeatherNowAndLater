@@ -2,7 +2,7 @@ package com.vodafone.data.remote.model
 
 import com.google.gson.annotations.SerializedName
 
-data class WeatherResponseDto(
+data class WeatherForecastDto(
     @SerializedName("city")
     val city: CityDto?,
     @SerializedName("cnt")
