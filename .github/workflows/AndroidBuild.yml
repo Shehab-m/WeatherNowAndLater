@@ -16,7 +16,7 @@ jobs:
         uses: actions/setup-java@v4.4.0
         with:
           distribution: 'adopt'
-          java-version: '1.8'
+          java-version: '17'
 
       - name: Gradle Cache
         uses: burrunan/gradle-cache-action@v1
