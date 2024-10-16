@@ -23,7 +23,7 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
 
-        val apiKey = localProps.getProperty("API_KEY") ?: "\"DEFAULT_API_KEY\""
+        val apiKey = localProps.getProperty("API_KEY")?.let { "\"$it\"" } ?: "\"DEFAULT_API_KEY\""
         buildConfigField("String", "API_KEY", apiKey)
     }
 
@@ -61,13 +61,13 @@ dependencies {
     implementation(libs.hilt.android)
     implementation(libs.androidx.hilt.work)
     kapt(libs.hilt.android.compiler)
-    //Retrofit
+    // Retrofit
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
     implementation(libs.gson)
-    //OkHttp
+    // OkHttp
     implementation(libs.okhttp)
     implementation(libs.okhttp.logger)
-    //DataStore
+    // DataStore
     implementation(libs.androidx.datastore.preferences)
 }
