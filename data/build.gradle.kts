@@ -8,7 +8,10 @@ plugins {
 }
 
 val localProps = Properties()
-val localPropsFile = localProps.load(project.rootProject.file("local.properties").inputStream())
+val localPropsFile = project.rootProject.file("local.properties")
+if (localPropsFile.exists()) {
+    localProps.load(localPropsFile.inputStream())
+}
 
 android {
     namespace = "com.vodafone.data"
@@ -20,7 +23,8 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
 
-        buildConfigField("String", "API_KEY", localProps.getProperty("API_KEY"))
+        val apiKey = localProps.getProperty("API_KEY")?.let { "\"$it\"" } ?: "\"DEFAULT_API_KEY\""
+        buildConfigField("String", "API_KEY", apiKey)
     }
 
     buildTypes {
@@ -52,18 +56,18 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-    implementation (libs.androidx.work.runtime.ktx)
+    implementation(libs.androidx.work.runtime.ktx)
     // Hilt
     implementation(libs.hilt.android)
     implementation(libs.androidx.hilt.work)
     kapt(libs.hilt.android.compiler)
-    //Retrofit
+    // Retrofit
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
     implementation(libs.gson)
-    //OkHttp
+    // OkHttp
     implementation(libs.okhttp)
     implementation(libs.okhttp.logger)
-    //DataStore
+    // DataStore
     implementation(libs.androidx.datastore.preferences)
 }
