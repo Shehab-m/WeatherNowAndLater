@@ -23,7 +23,7 @@ jobs:
         run: chmod +x ./gradlew
 
       - name: Create local.properties
-        run: echo "sdk.dir=/usr/local/android-sdk" > local.properties
+        run: echo "API_KEY=${{ secrets.API_KEY }}" > local.properties
 
       - name: Build with Gradle
         run: ./gradlew build
