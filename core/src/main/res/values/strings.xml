@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="header_icon">Header Icon</string>
+    <string name="back_icon">Back Icon</string>
+</resources>
