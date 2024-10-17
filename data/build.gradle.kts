@@ -23,7 +23,7 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
 
-        val apiKey = localProps.getProperty("API_KEY") ?: "DEFAULT_API_KEY"
+        val apiKey = localProps.getProperty("API_KEY")?.let { "\"$it\"" } ?: "\"DEFAULT_API_KEY\""
         buildConfigField("String", "API_KEY", apiKey)
     }
 
