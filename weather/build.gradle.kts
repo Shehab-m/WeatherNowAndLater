@@ -64,5 +64,7 @@ dependencies {
     implementation(libs.androidx.hilt.work)
     kapt(libs.hilt.android.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
+    // WeatherUtils
+    implementation(libs.weatherutils)
 
 }
