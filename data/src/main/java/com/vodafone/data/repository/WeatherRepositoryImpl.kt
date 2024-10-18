@@ -1,6 +1,5 @@
 package com.vodafone.data.repository
 
-import android.util.Log
 import com.vodafone.core.domain.model.CityWeather
 import com.vodafone.core.domain.model.WeatherForecast
 import com.vodafone.core.repository.WeatherRepository
@@ -8,6 +7,7 @@ import com.vodafone.data.local.DataStoreManager
 import com.vodafone.data.remote.WeatherApiService
 import com.vodafone.data.repository.mapper.toEntity
 import retrofit2.Response
+import timber.log.Timber
 import javax.inject.Inject
 
 class WeatherRepositoryImpl @Inject constructor(
@@ -38,15 +38,15 @@ class WeatherRepositoryImpl @Inject constructor(
             val apiResponse = function()
             if (apiResponse.isSuccessful) {
                 val responseBody = apiResponse.body()
-                Log.d("Tag", "response Success: $responseBody")
+                Timber.tag("Tag").d("response Success: %s", responseBody)
                 responseBody ?: throw Exception("Data not found!")
             } else {
                 val message = apiResponse.message()
-                Log.d("Tag", "response Not Success:: $message")
+                Timber.tag("Tag").d("response Not Success:: %s", message)
                 throw Exception(message)
             }
         } catch (e: Exception) {
-            Log.e("Tag", "response Error:${e.message}")
+            Timber.tag("Tag").e("response Error:%s", e.message)
             throw Exception("${e.message}")
         }
     }

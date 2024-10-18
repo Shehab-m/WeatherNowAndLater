@@ -61,6 +61,7 @@ dependencies {
     implementation(libs.material)
     implementation(libs.accompanist.permissions)
     implementation(libs.accompanist.systemuicontroller)
+    implementation(libs.compose.runtime)
     // Hilt
     implementation(libs.hilt.android)
     implementation(libs.androidx.hilt.work)
