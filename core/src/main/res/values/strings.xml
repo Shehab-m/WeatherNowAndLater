@@ -2,4 +2,6 @@
 <resources>
     <string name="header_icon">Header Icon</string>
     <string name="back_icon">Back Icon</string>
+    <string name="weather_placeholder">weather placeholder</string>
+    <string name="let_s_find_out_the_weather">Let\'s Find out the weather!</string>
 </resources>
