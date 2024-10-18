@@ -1,5 +1,6 @@
 package com.vodafone.weather
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -16,11 +17,13 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -38,88 +41,118 @@ import com.vodafone.core.designSystem.theme.WeatherAppTheme
 import com.vodafone.weatherutils.getWeatherIcon
 import com.vodafone.weatherutils.toFormatedTemperatureText
 import com.vodafone.weatherutils.toFormatedWindSpeedText
+import kotlinx.coroutines.flow.collectLatest
 
 @Composable
-fun WeatherScreen(viewModel: WeatherViewModel = hiltViewModel()) {
-    WeatherContent()
+fun WeatherScreen(
+    viewModel: WeatherViewModel = hiltViewModel(),
+) {
+    val context = LocalContext.current
+
+    LaunchedEffect(key1 = Unit) {
+        viewModel.effect.collectLatest { effect ->
+            when (effect) {
+                WeatherUiEffect.ShowErrorToast -> {
+                    Toast.makeText(
+                        context, context.getString(R.string.error_message), Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+        }
+    }
+
+    WeatherContent(
+        searchInput = viewModel.searchQuery,
+        cityWeather = viewModel.cityWeather,
+        isLoading = viewModel.isLoading,
+        isError = viewModel.isError,
+        isCityNameCorrect = viewModel.isCityNameCorrect,
+        onClickForecast = {
+
+        },
+        onClickTryAgain = viewModel::onClickTryAgain,
+        onChangeSearchQuery = viewModel::onChangeSearchQuery
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WeatherContent(
-
+    searchInput: String,
+    cityWeather: CityWeatherUIState,
+    isLoading: Boolean,
+    isError: Boolean,
+    isCityNameCorrect: Boolean,
+    onClickTryAgain: () -> Unit,
+    onClickForecast: () -> Unit,
+    onChangeSearchQuery: (query: String) -> Unit,
 ) {
-    Scaffold(
-        topBar = {
-            Column {
-                WTopBar(
-                    title = "Today's Weather",
-                    icon = painterResource(id = R.drawable.temperature),
-                )
-                WSearchField(
-                    modifier = Modifier.padding(horizontal = 20.dp),
-                    value = "",
-                    onValueChange = {},
-                    placeHolder = "Type here a city name..",
-                    enabled = true
-                )
-            }
+    Scaffold(topBar = {
+        Column {
+            WTopBar(
+                title = "Today's Weather",
+                icon = painterResource(id = R.drawable.temperature),
+            )
+            WSearchField(
+                modifier = Modifier.padding(horizontal = 20.dp),
+                value = searchInput,
+                onValueChange = onChangeSearchQuery,
+                placeHolder = "Type here a city name..",
+                enabled = true
+            )
         }
-    ) { innerPadding ->
-        WAnimationContent(
-            state = false,
-            content = {
-                WAnimationContentState(
-                    state = true,
+    }) { innerPadding ->
+        WAnimationContent(state = isLoading, content = {
+            WAnimationContentState(state = !isLoading && !isError) {
+                WAnimationContentState(state = cityWeather.cityName.isNotEmpty() && isCityNameCorrect,
                     content = {
-                        Column(
+                    Column(
+                        modifier = Modifier
+                            .padding(top = innerPadding.calculateTopPadding() + 40.dp)
+                            .fillMaxSize(),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        CardCityWeather(
+                            weatherIcon = painterResource(id = getWeatherIcon(cityWeather.weather)),
+                            temperature = cityWeather.temperature,
+                            cityName = cityWeather.cityName,
+                            wind = cityWeather.wind,
+                            weather = cityWeather.weather
+                        )
+                        WFilledButton(
                             modifier = Modifier
-                                .padding(top = innerPadding.calculateTopPadding() + 40.dp)
-                                .fillMaxSize(),
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            CardCityWeather(
-                                weatherIcon = painterResource(id = getWeatherIcon("Rain")),
-                                temperature = 19.0,
-                                cityName = "Cairo",
-                                wind = 32.7,
-                                weather = "Rain"
-                            )
-                            WFilledButton(
-                                modifier = Modifier
-                                    .padding(top = 20.dp)
-                                    .height(62.dp),
-                                label = "See next 5 days forecast! ->",
-                                onClick = {})
-                        }
-                    },
-                    placeholderContent = {
-                        Box(
-                            Modifier
-                                .padding(horizontal = 20.dp)
-                                .fillMaxSize(),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            WeatherPlaceholder()
-                        }
+                                .padding(top = 20.dp)
+                                .height(62.dp),
+                            label = "See next 5 days forecast! ->",
+                            onClick = onClickForecast
+                        )
                     }
-                )
-            },
-            loadingContent = {
-                Loading(state = false)
-            },
-            isError = false
+                }, placeholderContent = {
+                    Box(
+                        Modifier
+                            .padding(horizontal = 20.dp)
+                            .fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        val placeholderText = if (isCityNameCorrect) {
+                            stringResource(id = R.string.let_s_find_out_the_weather)
+                        } else {
+                            stringResource(id = R.string.city_not_found)
+                        }
+                        WeatherPlaceholder(placeholderText)
+                    }
+                })
+            }
+        }, loadingContent = {
+            Loading(state = isLoading)
+        }, isError = isError, onClickTryAgain = onClickTryAgain
         )
     }
 }
 
 @Composable
 private fun CardCityWeather(
-    weatherIcon: Painter,
-    temperature: Double,
-    cityName: String,
-    wind: Double,
-    weather: String
+    weatherIcon: Painter, temperature: Double, cityName: String, wind: Double, weather: String
 ) {
     Box(
         modifier = Modifier
@@ -135,8 +168,7 @@ private fun CardCityWeather(
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             Icon(
-                modifier = Modifier
-                    .size(160.dp),
+                modifier = Modifier.size(160.dp),
                 painter = weatherIcon,
                 contentDescription = stringResource(id = R.string.weather_placeholder),
                 tint = Color.Unspecified
@@ -167,7 +199,7 @@ private fun CardCityWeather(
 }
 
 @Composable
-private fun WeatherPlaceholder() {
+private fun WeatherPlaceholder(placeholderText: String) {
     Column(
         modifier = Modifier
             .padding(bottom = 200.dp)
@@ -183,7 +215,7 @@ private fun WeatherPlaceholder() {
             tint = Color.Unspecified
         )
         Text(
-            text = stringResource(id = R.string.let_s_find_out_the_weather),
+            text = placeholderText,
             style = MaterialTheme.typography.titleLarge,
             color = MaterialTheme.colorScheme.primary,
             textAlign = TextAlign.Center
@@ -196,7 +228,13 @@ private fun WeatherPlaceholder() {
 fun AuthScreenPreview() {
     WeatherAppTheme {
         WeatherContent(
-
-        )
+            searchInput = "",
+            cityWeather = CityWeatherUIState(193.0, "Cairo", 37.8, "Rain"),
+            isLoading = false,
+            isError = false,
+            isCityNameCorrect = false,
+            onClickForecast = {},
+            onClickTryAgain = {},
+            onChangeSearchQuery = {})
     }
 }
