@@ -10,6 +10,8 @@ import androidx.lifecycle.viewModelScope
 import com.vodafone.core.base.BaseViewModel
 import com.vodafone.core.domain.model.CityWeather
 import com.vodafone.core.domain.usecase.GetCurrentWeatherUseCase
+import com.vodafone.core.domain.usecase.GetLatestCityNameUseCase
+import com.vodafone.core.domain.usecase.SaveCityNameUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collectLatest
@@ -20,13 +22,15 @@ import javax.inject.Inject
 
 @HiltViewModel
 class WeatherViewModel @Inject constructor(
-    private val getCurrentWeatherUseCase: GetCurrentWeatherUseCase
+    private val getCurrentWeatherUseCase: GetCurrentWeatherUseCase,
+    private val getLatestCityNameUseCase: GetLatestCityNameUseCase,
+    private val saveCityNameUseCase: SaveCityNameUseCase,
 ) : BaseViewModel<WeatherUiEffect>() {
 
     var cityWeather by mutableStateOf(CityWeatherUIState())
         private set
 
-    var isLoading by mutableStateOf(false)
+    var isLoading by mutableStateOf(true)
         private set
 
     var isError by mutableStateOf(false)
@@ -39,7 +43,19 @@ class WeatherViewModel @Inject constructor(
         private set
 
     init {
+        getLatestCityNameWeather()
         observeSearchQuery()
+    }
+
+    private fun getLatestCityNameWeather() {
+        viewModelScope.launch {
+            val storedCityName = getLatestCityNameUseCase()
+            if (storedCityName != null) {
+                searchCities(storedCityName)
+            } else {
+                isLoading = false
+            }
+        }
     }
 
     @OptIn(FlowPreview::class)
@@ -54,7 +70,6 @@ class WeatherViewModel @Inject constructor(
         }
     }
 
-
     private fun searchCities(query: String) {
         searchQuery = query
         isLoading = true
@@ -65,9 +80,12 @@ class WeatherViewModel @Inject constructor(
     }
 
     private fun onSuccessSearch(weather: CityWeather) {
-        isLoading = false
-        isCityNameCorrect = true
-        cityWeather = weather.toUIState()
+        viewModelScope.launch {
+            saveCityNameUseCase(weather.name)
+            isLoading = false
+            isCityNameCorrect = true
+            cityWeather = weather.toUIState()
+        }
     }
 
     private fun onError(error: Exception) {
