@@ -7,7 +7,7 @@ plugins {
 }
 
 android {
-    namespace = "com.vodafone.core"
+    namespace = "com.vodafone.weather"
     compileSdk = 34
 
     defaultConfig {
@@ -36,12 +36,13 @@ android {
     buildFeatures {
         compose = true
     }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
-    }
 }
 
 dependencies {
+    implementation(project(":core"))
+    implementation(project(":data"))
+    implementation(libs.androidx.appcompat)
+    implementation(libs.material)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -57,13 +58,14 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
-    implementation(libs.androidx.appcompat)
-    implementation(libs.material)
-    implementation(libs.accompanist.permissions)
-    implementation(libs.accompanist.systemuicontroller)
+    implementation (libs.androidx.work.runtime.ktx)
     implementation(libs.compose.runtime)
     // Hilt
     implementation(libs.hilt.android)
     implementation(libs.androidx.hilt.work)
     kapt(libs.hilt.android.compiler)
+    implementation(libs.androidx.hilt.navigation.compose)
+    // WeatherUtils
+    implementation(libs.weatherutils)
+
 }

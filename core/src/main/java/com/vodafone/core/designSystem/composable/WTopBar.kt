@@ -71,7 +71,7 @@ fun WTopBar(
                 Icon(
                     modifier = Modifier
                         .padding(start = 8.dp)
-                        .size(26.dp),
+                        .size(32.dp),
                     painter = it,
                     contentDescription = stringResource(R.string.header_icon),
                     tint = iconColor
@@ -88,7 +88,7 @@ fun TTopBarPreview() {
     WeatherAppTheme {
         WTopBar(
             title = "Github Repositories",
-            icon = painterResource(id = R.drawable.weather_error),
+            icon = painterResource(id = R.drawable.temperature),
             iconColor = MaterialTheme.colorScheme.secondary,
             backIcon = painterResource(id = R.drawable.arrow_left),
             backIconColor = MaterialTheme.colorScheme.primary
