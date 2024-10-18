@@ -73,16 +73,16 @@ dependencies {
     // DataStore
     implementation(libs.androidx.datastore.preferences)
     // Unit Test
-    testImplementation ("org.jetbrains.kotlin:kotlin-test:1.9.10")
-    testImplementation ("junit:junit:4.13.2")
-    testRuntimeOnly ("org.junit.jupiter:junit-jupiter-engine:5.10.0")
+    testImplementation(libs.kotlin.test)
+    testImplementation(libs.junit4)
+    testRuntimeOnly(libs.junit.jupiter.engine)
     // Coroutines Test
-    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0")
-    testImplementation ("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.0")
-    // Mockito for mocking
-    testImplementation ("org.mockito:mockito-core:5.5.0")
+    implementation(libs.kotlinx.coroutines.core)
+    testImplementation(libs.kotlinx.coroutines.test)
+    // Mockito
+    testImplementation(libs.mockito.core)
     // Robolectric
-    testImplementation ("org.robolectric:robolectric:4.10")
-    // Logs
-    implementation ("com.jakewharton.timber:timber:5.0.1")
+    testImplementation(libs.robolectric)
+    // Timber for logs
+    implementation(libs.timber)
 }
