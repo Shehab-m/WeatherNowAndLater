@@ -10,6 +10,7 @@ activityCompose = "1.9.3"
 composeBom = "2024.10.00"
 appcompat = "1.7.0"
 material = "1.12.0"
+runtime = "1.0.0"
 
 accompanistPermissions = "0.28.0"
 hiltAndroid = "2.49"
@@ -17,10 +18,11 @@ hiltWork = "1.2.0"
 retrofit = "2.9.0"
 gson = "2.10.1"
 okhttp = "5.0.0-alpha.11"
-weatherutils = "1.0.0"
+weatherutils = "1.0.1"
 workRuntimeKtx = "2.9.1"
 datastorePreferences = "1.1.1"
 hiltNavigationCompose = "1.2.0"
+junitJunit = "4.12"
 
 
 [libraries]
@@ -48,6 +50,7 @@ hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltA
 hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hiltAndroid" }
 androidx-hilt-work = { module = "androidx.hilt:hilt-work", version.ref = "hiltWork" }
 androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
+compose-runtime = { module = "androidx.compose.runtime:runtime", version.ref = "runtime" }
 
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit" }
@@ -56,6 +59,7 @@ okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
 okhttp-logger = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "okhttp" }
 androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastorePreferences" }
 weatherutils = { module = "com.vodafone.shehab:weatherUtils", version.ref = "weatherutils" }
+junit-junit = { group = "junit", name = "junit", version.ref = "junitJunit" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
