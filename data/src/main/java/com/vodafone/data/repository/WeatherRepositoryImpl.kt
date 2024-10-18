@@ -1,5 +1,6 @@
 package com.vodafone.data.repository
 
+import android.content.res.Resources.NotFoundException
 import com.vodafone.core.domain.model.CityWeather
 import com.vodafone.core.domain.model.WeatherForecast
 import com.vodafone.core.repository.WeatherRepository
@@ -46,8 +47,12 @@ class WeatherRepositoryImpl @Inject constructor(
                 throw Exception(message)
             }
         } catch (e: Exception) {
-            Timber.tag("Tag").e("response Error:%s", e.message)
-            throw Exception("${e.message}")
+            val message = e.message ?: "Unknown"
+            Timber.tag("Tag").e("response Error:%s", message)
+            if (message.contains("Not Found")){
+                throw NotFoundException("City name not found")
+            }
+            throw Exception(message)
         }
     }
 }
