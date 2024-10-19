@@ -110,10 +110,6 @@ class WeatherViewModel @Inject constructor(
         searchQuery = query
     }
 
-    fun changeLoadingState(state: Boolean) {
-        isLoading = state
-    }
-
     fun changeAlertState(state: Boolean) {
         showAlert = state
     }

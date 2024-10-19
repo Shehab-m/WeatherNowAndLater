@@ -1,5 +1,6 @@
 package com.vodafone.weather
 
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -18,7 +19,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -75,7 +75,6 @@ fun WeatherScreen(
         changeShowAlertState = viewModel::changeAlertState,
         onClickTryAgain = viewModel::onClickTryAgain,
         onChangeSearchQuery = viewModel::onChangeSearchQuery,
-        changeLoadingState = viewModel::changeLoadingState,
     )
 }
 
@@ -92,10 +91,9 @@ fun WeatherContent(
     onClickTryAgain: () -> Unit,
     changeShowAlertState: (Boolean) -> Unit,
     onChangeSearchQuery: (query: String) -> Unit,
-    changeLoadingState: (Boolean) -> Unit,
 ) {
     val context = LocalContext.current
-    val coroutineScope = rememberCoroutineScope()
+    Log.d("WeatherContent: ","${isModuleInstalled(context)}")
     if (showAlert) {
         WAlertDialog(
             onDismissRequest = { changeShowAlertState(false) },
@@ -273,7 +271,6 @@ fun AuthScreenPreview() {
             changeShowAlertState = {},
             onClickTryAgain = {},
             onChangeSearchQuery = {},
-            changeLoadingState = {},
             showAlert = true,
             navigateToForecast = {}
         )
