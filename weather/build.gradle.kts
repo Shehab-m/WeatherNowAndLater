@@ -67,5 +67,8 @@ dependencies {
     implementation(libs.androidx.hilt.navigation.compose)
     // WeatherUtils
     implementation(libs.weatherutils)
+    // Dynamic Delivery
+    implementation(libs.feature.delivery)
+    implementation(libs.feature.delivery.ktx)
 
 }
