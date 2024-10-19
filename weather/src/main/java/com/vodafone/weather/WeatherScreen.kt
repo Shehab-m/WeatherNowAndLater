@@ -1,6 +1,5 @@
 package com.vodafone.weather
 
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -93,7 +92,6 @@ fun WeatherContent(
     onChangeSearchQuery: (query: String) -> Unit,
 ) {
     val context = LocalContext.current
-    Log.d("WeatherContent: ","${isModuleInstalled(context)}")
     if (showAlert) {
         WAlertDialog(
             onDismissRequest = { changeShowAlertState(false) },
@@ -106,7 +104,8 @@ fun WeatherContent(
             icon = painterResource(id = R.drawable.download)
         )
     }
-    Scaffold(topBar = {
+    Scaffold(
+        topBar = {
         Column {
             WTopBar(
                 title = "Today's Weather",

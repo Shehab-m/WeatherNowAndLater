@@ -28,7 +28,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
@@ -88,6 +87,7 @@ fun ForecastContent(
                 LazyColumn(
                     modifier = Modifier
                         .padding(top = innerPadding.calculateTopPadding())
+                        .padding(horizontal = 20.dp)
                         .fillMaxSize(),
                     verticalArrangement = Arrangement.spacedBy(8.dp),
                     contentPadding = PaddingValues(bottom = 16.dp)
@@ -96,9 +96,13 @@ fun ForecastContent(
                         val dayTimes = forecast.toMutableList()
                         val firstDayTime = dayTimes.first()
                         dayTimes.removeAt(0)
-                        Box(modifier = Modifier.shadow(2.dp)) {
+                        Card(
+                            modifier = Modifier,
+                            elevation = CardDefaults.cardElevation(2.dp),
+                            colors = CardDefaults.cardColors(MaterialTheme.colorScheme.primary),
+                            shape = RoundedCornerShape(20.dp)
+                        ) {
                             Column(
-                                modifier = Modifier.padding(8.dp),
                                 verticalArrangement = Arrangement.spacedBy(8.dp)
                             ) {
                                 val weather = firstDayTime.weather
@@ -111,12 +115,17 @@ fun ForecastContent(
                                 )
                                 LazyRow(
                                     horizontalArrangement = Arrangement.spacedBy(4.dp),
+                                    contentPadding = PaddingValues(horizontal = 8.dp)
                                 ) {
                                     items(dayTimes) { dayTime ->
                                         val dayTimeWeather = dayTime.weather
                                         CardSmallCityWeather(
-                                            icon = painterResource(id = getWeatherIcon(dayTimeWeather)),
-                                            weather = "dayTimeWeather",
+                                            icon = painterResource(
+                                                id = getWeatherIcon(
+                                                    dayTimeWeather
+                                                )
+                                            ),
+                                            weather = dayTimeWeather,
                                             temperature = dayTime.temperature,
                                         )
                                     }
@@ -237,7 +246,7 @@ fun CardCityWeather(
                 modifier = Modifier
                     .align(Alignment.TopEnd)
                     .padding(8.dp)
-                    .size(160.dp),
+                    .size(120.dp),
                 painter = icon,
                 contentDescription = "Category icon",
                 tint = Color.Unspecified

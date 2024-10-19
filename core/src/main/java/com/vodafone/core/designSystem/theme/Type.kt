@@ -40,6 +40,6 @@ val Typography = Typography(
     headlineLarge = TextStyle(
         fontFamily = robotoFont,
         fontWeight = FontWeight.W500,
-        fontSize = 62.sp,
+        fontSize = 54.sp,
     ),
 )
