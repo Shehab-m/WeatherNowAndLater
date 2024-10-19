@@ -99,7 +99,10 @@ splitInstallManager.deferredUninstall(listOf("Forecast"))
 ```
 
 ### Deep Link Usage Example
-To open a deep link in the app, you can use the following code:
+
+To handle modularized navigation between the main app module and the Dynamic Feature Module (DFM), you can use deep links. This allows you to seamlessly transition to different features of your app based on user actions or input.
+
+To open a deep link in the app, you can use the following code snippet:
 
 ```kotlin
 val intent = Intent(Intent.ACTION_VIEW).apply {
