@@ -42,6 +42,9 @@ class WeatherViewModel @Inject constructor(
     var searchQuery by mutableStateOf("")
         private set
 
+    var showAlert by mutableStateOf(false)
+        private set
+
     init {
         getLatestCityNameWeather()
         observeSearchQuery()
@@ -106,5 +109,14 @@ class WeatherViewModel @Inject constructor(
     fun onChangeSearchQuery(query: String) {
         searchQuery = query
     }
+
+    fun changeLoadingState(state: Boolean) {
+        isLoading = state
+    }
+
+    fun changeAlertState(state: Boolean) {
+        showAlert = state
+    }
+
 }
 
