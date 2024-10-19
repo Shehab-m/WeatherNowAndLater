@@ -17,6 +17,9 @@ dependencyResolutionManagement {
         google()
         mavenCentral()
         mavenLocal()
+        flatDir {
+            dir("libs")
+        }
     }
 }
 
@@ -25,3 +28,4 @@ include(":app")
 include(":core")
 include(":data")
 include(":weather")
+include(":Forecast")
