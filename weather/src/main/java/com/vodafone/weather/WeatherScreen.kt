@@ -1,5 +1,6 @@
 package com.vodafone.weather
 
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -32,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.vodafone.core.R
 import com.vodafone.core.designSystem.composable.Loading
+import com.vodafone.core.designSystem.composable.WAlertDialog
 import com.vodafone.core.designSystem.composable.WAnimationContent
 import com.vodafone.core.designSystem.composable.WAnimationContentState
 import com.vodafone.core.designSystem.composable.WFilledButton
@@ -46,6 +48,7 @@ import kotlinx.coroutines.flow.collectLatest
 @Composable
 fun WeatherScreen(
     viewModel: WeatherViewModel = hiltViewModel(),
+    navigateToForecast: (String) -> Unit
 ) {
     val context = LocalContext.current
 
@@ -66,12 +69,12 @@ fun WeatherScreen(
         cityWeather = viewModel.cityWeather,
         isLoading = viewModel.isLoading,
         isError = viewModel.isError,
+        showAlert = viewModel.showAlert,
         isCityNameCorrect = viewModel.isCityNameCorrect,
-        onClickForecast = {
-
-        },
+        navigateToForecast = navigateToForecast,
+        changeShowAlertState = viewModel::changeAlertState,
         onClickTryAgain = viewModel::onClickTryAgain,
-        onChangeSearchQuery = viewModel::onChangeSearchQuery
+        onChangeSearchQuery = viewModel::onChangeSearchQuery,
     )
 }
 
@@ -83,10 +86,26 @@ fun WeatherContent(
     isLoading: Boolean,
     isError: Boolean,
     isCityNameCorrect: Boolean,
+    showAlert: Boolean,
+    navigateToForecast: (String) -> Unit,
     onClickTryAgain: () -> Unit,
-    onClickForecast: () -> Unit,
+    changeShowAlertState: (Boolean) -> Unit,
     onChangeSearchQuery: (query: String) -> Unit,
 ) {
+    val context = LocalContext.current
+    Log.d("WeatherContent: ","${isModuleInstalled(context)}")
+    if (showAlert) {
+        WAlertDialog(
+            onDismissRequest = { changeShowAlertState(false) },
+            onConfirmation = {
+                changeShowAlertState(false)
+                navigateToForecast(searchInput)
+            },
+            dialogTitle = "Files Download",
+            dialogText = "Files must be downloaded to open this feature!",
+            icon = painterResource(id = R.drawable.download)
+        )
+    }
     Scaffold(topBar = {
         Column {
             WTopBar(
@@ -102,50 +121,66 @@ fun WeatherContent(
             )
         }
     }) { innerPadding ->
-        WAnimationContent(state = isLoading, content = {
-            WAnimationContentState(state = !isLoading && !isError) {
-                WAnimationContentState(state = cityWeather.cityName.isNotEmpty() && isCityNameCorrect,
-                    content = {
-                    Column(
-                        modifier = Modifier
-                            .padding(top = innerPadding.calculateTopPadding() + 40.dp)
-                            .fillMaxSize(),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        CardCityWeather(
-                            weatherIcon = painterResource(id = getWeatherIcon(cityWeather.weather)),
-                            temperature = cityWeather.temperature,
-                            cityName = cityWeather.cityName,
-                            wind = cityWeather.wind,
-                            weather = cityWeather.weather
-                        )
-                        WFilledButton(
-                            modifier = Modifier
-                                .padding(top = 20.dp)
-                                .height(62.dp),
-                            label = "See next 5 days forecast! ->",
-                            onClick = onClickForecast
-                        )
-                    }
-                }, placeholderContent = {
-                    Box(
-                        Modifier
-                            .padding(horizontal = 20.dp)
-                            .fillMaxSize(),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        val placeholderText = if (isCityNameCorrect) {
-                            stringResource(id = R.string.let_s_find_out_the_weather)
-                        } else {
-                            stringResource(id = R.string.city_not_found)
+        WAnimationContent(
+            state = isLoading,
+            content = {
+                WAnimationContentState(
+                    state = !isLoading && !isError
+                ) {
+                    WAnimationContentState(
+                        state = cityWeather.cityName.isNotEmpty() && isCityNameCorrect,
+                        content = {
+                            Column(
+                                modifier = Modifier
+                                    .padding(top = innerPadding.calculateTopPadding() + 40.dp)
+                                    .fillMaxSize(),
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                CardCityWeather(
+                                    weatherIcon = painterResource(id = getWeatherIcon(cityWeather.weather)),
+                                    temperature = cityWeather.temperature,
+                                    cityName = cityWeather.cityName,
+                                    wind = cityWeather.wind,
+                                    weather = cityWeather.weather
+                                )
+                                WFilledButton(
+                                    modifier = Modifier
+                                        .padding(top = 20.dp)
+                                        .height(62.dp),
+                                    label = "See next 5 days forecast! ->",
+                                    onClick = {
+                                        if (isModuleInstalled(context)) {
+                                            navigateToForecast(searchInput)
+                                        } else {
+                                            changeShowAlertState(true)
+                                        }
+                                    }
+                                )
+                            }
+                        },
+                        placeholderContent = {
+                            Box(
+                                Modifier
+                                    .padding(horizontal = 20.dp)
+                                    .fillMaxSize(),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                val placeholderText = if (isCityNameCorrect) {
+                                    stringResource(id = R.string.let_s_find_out_the_weather)
+                                } else {
+                                    stringResource(id = R.string.city_not_found)
+                                }
+                                WeatherPlaceholder(placeholderText)
+                            }
                         }
-                        WeatherPlaceholder(placeholderText)
-                    }
-                })
-            }
-        }, loadingContent = {
-            Loading(state = isLoading)
-        }, isError = isError, onClickTryAgain = onClickTryAgain
+                    )
+                }
+            },
+            loadingContent = {
+                Loading(state = isLoading)
+            },
+            isError = isError,
+            onClickTryAgain = onClickTryAgain
         )
     }
 }
@@ -225,7 +260,7 @@ private fun WeatherPlaceholder(placeholderText: String) {
 
 @Composable
 @Preview
-fun AuthScreenPreview() {
+fun WeatherScreenPreview() {
     WeatherAppTheme {
         WeatherContent(
             searchInput = "",
@@ -233,8 +268,11 @@ fun AuthScreenPreview() {
             isLoading = false,
             isError = false,
             isCityNameCorrect = false,
-            onClickForecast = {},
+            changeShowAlertState = {},
             onClickTryAgain = {},
-            onChangeSearchQuery = {})
+            onChangeSearchQuery = {},
+            showAlert = true,
+            navigateToForecast = {}
+        )
     }
 }
