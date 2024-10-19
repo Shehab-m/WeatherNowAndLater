@@ -260,7 +260,7 @@ private fun WeatherPlaceholder(placeholderText: String) {
 
 @Composable
 @Preview
-fun AuthScreenPreview() {
+fun WeatherScreenPreview() {
     WeatherAppTheme {
         WeatherContent(
             searchInput = "",
