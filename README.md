@@ -11,6 +11,7 @@ This repository contains a Weather App built using **Jetpack Compose** and moder
 - **Dependency Injection with Dagger-Hilt**
 - **Unit Testing**
 - **Clean Architecture**
+- **Design System**: A comprehensive design system is implemented to handle app-wide theming, ensuring a consistent look and feel across light and dark modes.
 
 ## Project Structure
 
@@ -21,29 +22,32 @@ This repository contains a Weather App built using **Jetpack Compose** and moder
 - **Data Module**: Contains data sources(ex: network, local) and repository.
 
 ## Functional Requirements
-
 1. **User Input:** Allow users to input a city name.
 
 2. **Display Current Weather:** Show the current weather (temperature, condition, and appropriate icon).
 
-   ![weatherLight](https://github.com/user-attachments/assets/86610f19-0ae1-4f97-8426-359e392b6b9e)
-   ![currentWeatherDark](https://github.com/user-attachments/assets/38cf4b6a-1372-449e-82fc-21a09399b48b)
+   <img src="https://github.com/user-attachments/assets/86610f19-0ae1-4f97-8426-359e392b6b9e" width="200"/>
+   <img src="https://github.com/user-attachments/assets/38cf4b6a-1372-449e-82fc-21a09399b48b" width="200"/>
 
 3. **7-Day Forecast:** Display the forecast for the next 7 days.
 
-   ![forecast](https://github.com/user-attachments/assets/634a75f8-20b2-49e1-8da4-fe4edab1c231)
-   ![forecastDark](https://github.com/user-attachments/assets/ff7c8bc8-fdc2-45ba-b3d2-b25160536a33)
+   <img src="https://github.com/user-attachments/assets/634a75f8-20b2-49e1-8da4-fe4edab1c231" width="200"/>
+   <img src="https://github.com/user-attachments/assets/ff7c8bc8-fdc2-45ba-b3d2-b25160536a33" width="200"/>
 
 4. **Persistence:** Store the last searched city and show its weather on app reopen.
 
- 
+5. **Exception Handling:** Implement error handling for cases such as network failure, invalid city name, or API response errors.
+
+   <img src="https://github.com/user-attachments/assets/e49766b0-682e-4aee-98c0-d8aa4fdf4083" width="200"/>
+   <img src="https://github.com/user-attachments/assets/df0fba90-d2e4-474e-bfd0-aa0e2ba90c55" width="200"/>
+
 
 ## Dynamic Feature Module (DFM) Setup
 
 ### Dynamic Feature Module Creation
 The `Forecast` module was set up as a **dynamic feature module** that gets downloaded on-demand:
 
-![dialouge](https://github.com/user-attachments/assets/b7c62042-b82c-4005-aefd-6038ddb57ff8)
+   <img src="https://github.com/user-attachments/assets/b7c62042-b82c-4005-aefd-6038ddb57ff8" width="200"/>
 
 1. **Module Setup**:
    - Added the **Dynamic Feature** module via Android Studio (`File > New > New Module > Dynamic Feature Module`).
