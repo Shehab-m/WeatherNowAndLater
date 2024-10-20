@@ -16,6 +16,10 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        mavenLocal()
+        flatDir {
+            dir("libs")
+        }
     }
 }
 
@@ -23,3 +27,5 @@ rootProject.name = "Weather N&L"
 include(":app")
 include(":core")
 include(":data")
+include(":weather")
+include(":Forecast")

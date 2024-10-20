@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     kotlin("kapt")
     alias(libs.plugins.hilt.library)
+    alias(libs.plugins.compose.compiler)
 }
 
 val localProps = Properties()
@@ -19,7 +20,6 @@ android {
 
     defaultConfig {
         minSdk = 26
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
 
@@ -54,9 +54,11 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     testImplementation(libs.junit)
+    testImplementation(libs.junit.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     implementation(libs.androidx.work.runtime.ktx)
+    implementation(libs.compose.runtime)
     // Hilt
     implementation(libs.hilt.android)
     implementation(libs.androidx.hilt.work)
@@ -70,4 +72,17 @@ dependencies {
     implementation(libs.okhttp.logger)
     // DataStore
     implementation(libs.androidx.datastore.preferences)
+    // Unit Test
+    testImplementation(libs.kotlin.test)
+    testImplementation(libs.junit4)
+    testRuntimeOnly(libs.junit.jupiter.engine)
+    // Coroutines Test
+    implementation(libs.kotlinx.coroutines.core)
+    testImplementation(libs.kotlinx.coroutines.test)
+    // Mockito
+    testImplementation(libs.mockito.core)
+    // Robolectric
+    testImplementation(libs.robolectric)
+    // Timber for logs
+    implementation(libs.timber)
 }

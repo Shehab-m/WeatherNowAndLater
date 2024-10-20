@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="header_icon">Header Icon</string>
+    <string name="back_icon">Back Icon</string>
+    <string name="weather_placeholder">weather placeholder</string>
+    <string name="let_s_find_out_the_weather">Let\'s Find out the weather!</string>
+    <string name="city_not_found">City name not found!</string>
+    <string name="error_message">An error occurred. Please try again later</string>
+</resources>
