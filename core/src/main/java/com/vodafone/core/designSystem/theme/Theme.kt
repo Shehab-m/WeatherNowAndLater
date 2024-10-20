@@ -23,7 +23,7 @@ fun WeatherAppTheme(
     DisposableEffect(systemUiController) {
         systemUiController.setSystemBarsColor(
             color = Color.Transparent,
-            darkIcons = true,
+            darkIcons = !darkTheme,
             isNavigationBarContrastEnforced = false
         )
         onDispose {}
